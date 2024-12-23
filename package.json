@@ -1,15 +1,16 @@
 {
   "name": "angular-code-editor",
+  "version": "1.0.0",
   "private": true,
+  "main": "electron/main.js",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "dev": "ng serve",
     "build": "ng build",
-    "electron:serve": "NODE_ENV=development electron .",
-    "electron:build": "ng build && electron ."
+    "electron:serve": "wait-on tcp:4200 && electron .",
+    "electron:dev": "concurrently \"ng serve\" \"npm run electron:serve\"",
+    "electron:build": "ng build --configuration production && electron-builder"
   },
-  "main": "electron/main.js",
   "dependencies": {
     "@angular/animations": "^18.1.0",
     "@angular/common": "^18.1.0",
@@ -18,7 +19,7 @@
     "@angular/forms": "^18.1.0",
     "@angular/platform-browser": "^18.1.0",
     "@angular/router": "^18.1.0",
-    "electron": "^28.1.0",
+    "electron-is-dev": "^2.0.0",
     "rxjs": "^7.8.1",
     "tslib": "^2.5.0",
     "xterm": "^5.3.0",
@@ -30,6 +31,22 @@
     "@angular/cli": "^18.1.0",
     "@angular/compiler-cli": "^18.1.0",
     "@types/node": "^20.10.5",
-    "typescript": "~5.5.0"
+    "concurrently": "^8.2.2",
+    "electron": "^28.1.0",
+    "electron-builder": "^24.9.1",
+    "typescript": "~5.5.0",
+    "wait-on": "^7.2.0"
+  },
+  "build": {
+    "appId": "com.angular.code.editor",
+    "mac": {
+      "category": "public.app-category.developer-tools"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "linux": {
+      "target": ["AppImage", "deb"]
+    }
   }
 }
